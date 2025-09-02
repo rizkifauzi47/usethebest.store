@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DesainKita — Katalog Produk Desain</title>
+  <meta name="description" content="DesainKita adalah katalog produk desain siap beli. Klik produk untuk melihat detail dan beli via WhatsApp." />
+  <link rel="preconnect" href="https://images.unsplash.com"/>
+  <style>
+    :root{
+      --bg:#0f1115;--muted:#1a1f29;--card:#121722;--text:#e6edf3;--sub:#9aa4b2;--brand:#4f46e5;--brand-2:#22c55e;--accent:#eab308;--radius:18px
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";line-height:1.55}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(17,19,25,.9),rgba(17,19,25,.6));backdrop-filter:blur(10px);border-bottom:1px solid #1f2430}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px}
+    .wordmark{font-weight:800;letter-spacing:.2px}
+    .navlinks{display:flex;gap:10px}
+    .navlinks a{padding:10px 14px;border-radius:12px;color:var(--sub)}
+    .navlinks a:hover,.navlinks a.active{background:var(--muted);color:var(--text)}
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;padding:36px 0}
+    .hero .card{background:radial-gradient(1200px 500px at -10% -20%, rgba(79,70,229,.35), transparent),radial-gradient(900px 400px at 120% 120%, rgba(34,197,94,.25), transparent),var(--card);border:1px solid #1d2330;border-radius:var(--radius);padding:28px}
+    .hero h1{font-size:clamp(28px,4vw,44px);line-height:1.15;margin:0 0 12px}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#101622;border:1px solid #1d2330;color:#b7c3d0;border-radius:999px;padding:6px 12px;font-size:12px}
+    .hero p{color:var(--sub)}
+    .cta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid #293041;background:#151a25;color:#e9eef5;cursor:pointer;transition:.2s}
+    .btn:hover{transform:translateY(-1px);border-color:#3a4356}
+    .btn.primary{background:linear-gradient(180deg,#4f46e5,#4338ca);border-color:#4338ca}
+    .btn.success{background:linear-gradient(180deg,#22c55e,#16a34a);border-color:#16a34a}
+    /* Sections */
+    section{padding:28px 0}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .section-title h2{font-size:22px;margin:0}
+    /* Grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:var(--card);border:1px solid #1d2330;border-radius:var(--radius);overflow:hidden}
+    .thumb{position:relative;aspect-ratio:4/3;background:#0a0d12}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .badge{position:absolute;left:10px;top:10px;background:rgba(16,22,34,.85);border:1px solid #263045;color:#cbd5e1;padding:4px 8px;border-radius:999px;font-size:12px}
+    .card-body{padding:14px 14px 16px}
+    .title{font-weight:700;margin:4px 0 6px}
+    .desc{color:var(--sub);font-size:14px;height:40px;overflow:hidden}
+    .price{margin-top:8px;font-weight:800;font-size:18px}
+    .mini{display:flex;gap:8px;margin-top:12px}
+    .mini img{width:48px;height:48px;object-fit:cover;border-radius:10px;border:1px solid #22283a;cursor:pointer;opacity:.9}
+    .mini img:hover{opacity:1}
+    .card-actions{display:flex;gap:10px;margin-top:12px}
+    .btn.whatsapp{background:linear-gradient(180deg,#25D366,#1ebe57);border-color:#1ebe57}
+    /* Profile */
+    .profile{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .profile .card p{color:var(--sub)}
+    /* Footer */
+    footer{border-top:1px solid #1f2430;margin-top:36px}
+    .footer-inner{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:20px 0;color:#8b95a7}
+    .social a{padding:8px 12px;background:#141a25;border:1px solid #243049;border-radius:999px}
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:24px;z-index:100}
+    .modal.show{display:flex}
+    .modal .dialog{max-width:1000px;width:100%;background:var(--card);border:1px solid #1d2330;border-radius:22px;overflow:hidden;display:grid;grid-template-columns:1.2fr .8fr}
+    .gallery{background:#0a0f18;padding:12px;border-right:1px solid #1d2330}
+    .gallery-main{aspect-ratio:4/3;border-radius:16px;overflow:hidden;border:1px solid #1d2330}
+    .gallery-main img{width:100%;height:100%;object-fit:cover}
+    .gallery-thumbs{display:flex;gap:8px;margin-top:10px;overflow:auto}
+    .gallery-thumbs img{width:72px;height:72px;object-fit:cover;border-radius:12px;border:1px solid #1d2330;cursor:pointer;opacity:.9}
+    .gallery-thumbs img.active{outline:2px solid var(--brand)}
+    .dialog-body{padding:18px}
+    .dialog-title{display:flex;align-items:center;justify-content:space-between}
+    .close{background:#121826;border:1px solid #263145;border-radius:12px;padding:8px 10px;cursor:pointer}
+    .dialog-desc{color:var(--sub);margin:8px 0 12px}
+    .meta{display:flex;gap:12px;flex-wrap:wrap;color:#aab4c3;font-size:14px}
+    .dialog-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .hidden{display:none}
+    /* Responsive */
+    @media (max-width: 960px){
+      .hero{grid-template-columns:1fr}
+      .profile{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .modal .dialog{grid-template-columns:1fr}
+    }
+    @media (max-width: 600px){
+      .grid{grid-template-columns:1fr}
+      .navlinks{display:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Nav -->
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#beranda" aria-label="DesainKita Beranda">
+        <!-- Inline SVG Logo -->
+        <svg class="logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4f46e5"/>
+              <stop offset="1" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="60" height="60" rx="14" stroke="url(#g1)" stroke-width="3"/>
+          <path d="M16 36c8-16 24-16 32 0" stroke="#eab308" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="24" cy="28" r="3" fill="#4f46e5"/>
+          <circle cx="40" cy="28" r="3" fill="#22c55e"/>
+        </svg>
+        <span class="wordmark">V For Design</span>
+      </a>
+      <nav class="navlinks" aria-label="Navigasi utama">
+        <a href="#beranda" class="active">Beranda</a>
+        <a href="#produk">Produk</a>
+        <a href="#profil">Profil Toko</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <!-- Hero -->
+    <section id="beranda" class="hero">
+      <div class="card">
+        <span class="pill">✨ Katalog Desain Siap Pakai</span>
+        <h1>Bikin brand kamu <span style="color:var(--accent)">stand out</span> dengan desain berkualitas.</h1>
+        <p>Jelajahi katalog produk desain: logo, ilustrasi kaos, poster, mockup, dan paket branding. Klik produk untuk melihat detail gambar, deskripsi, dan beli langsung via WhatsApp.</p>
+        <div class="cta">
+          <a href="#produk" class="btn primary">Lihat Produk</a>
+          <a href="#profil" class="btn">Tentang Toko</a>
+          <a id="waTop" class="btn success" target="_blank" rel="noopener">Chat WhatsApp</a>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="overflow:hidden">
+          <img alt="Preview kolase produk" src="https://images.unsplash.com/photo-1529335764857-3f1164d1cb24?q=80&w=1200&auto=format&fit=crop"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produk -->
+    <section id="produk">
+      <div class="section-title">
+        <h2>Produk Unggulan</h2>
+        <div style="display:flex;gap:8px">
+          <input id="search" placeholder="Cari produk…" aria-label="Cari produk" style="padding:10px 12px;border-radius:12px;border:1px solid #263145;background:#0f1521;color:#d9e2ef;outline:none;width:220px"/>
+        </div>
+      </div>
+      <div id="grid" class="grid" role="list"></div>
+    </section>
+
+    <!-- Profil Toko -->
+    <section id="profil">
+      <div class="section-title"><h2>Profil Toko</h2></div>
+      <div class="profile">
+        <div class="card" style="padding:18px">
+          <h3 style="margin-top:0">DesainKita Studio</h3>
+          <p>Kami spesialis pembuatan aset visual untuk brand & merch: logo, ilustrasi kaos, template sosial media, dan paket identitas. Semua file siap cetak & komersial. Pesanan kustom? Bisa!</p>
+          <div class="meta">
+            <span>📍 Jakarta, Indonesia</span>
+            <span>🕒 Sen–Sab 09.00–18.00 WIB</span>
+            <span>📧 hello@desainkita.id</span>
+          </div>
+          <div class="dialog-actions" style="margin-top:12px">
+            <a id="waProfile" class="btn success" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+            <a href="#produk" class="btn">Lihat Katalog</a>
+          </div>
+        </div>
+        <div class="card" style="overflow:hidden">
+          <img alt="Studio" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop"/>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4f46e5"/>
+              <stop offset="1" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="60" height="60" rx="14" stroke="url(#g2)" stroke-width="3"/>
+          <path d="M16 36c8-16 24-16 32 0" stroke="#eab308" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="24" cy="28" r="3" fill="#4f46e5"/>
+          <circle cx="40" cy="28" r="3" fill="#22c55e"/>
+        </svg>
+        <strong>V For Design</strong>
+      </div>
+      <div class="social" aria-label="Sosial media">
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Behance">Behance</a>
+        <a href="#" aria-label="Dribbble">Dribbble</a>
+      </div>
+      <div>© <span id="year"></span> V For Design. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Modal Detail Produk -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="Detail Produk">
+    <div class="dialog">
+      <div class="gallery">
+        <div class="gallery-main"><img id="galleryMain" alt="Gambar produk"/></div>
+        <div id="galleryThumbs" class="gallery-thumbs" aria-label="Galeri gambar kecil"></div>
+      </div>
+      <div class="dialog-body">
+        <div class="dialog-title">
+          <h3 id="dialogTitle" style="margin:0"></h3>
+          <button id="closeModal" class="close" aria-label="Tutup">✕</button>
+        </div>
+        <p id="dialogDesc" class="dialog-desc"></p>
+        <div class="meta">
+          <span id="dialogPrice" class="price"></span>
+          <span id="dialogTags"></span>
+        </div>
+        <div class="dialog-actions">
+          <a id="buyBtn" class="btn whatsapp" target="_blank" rel="noopener">Beli via WhatsApp</a>
+          <button id="copyLink" class="btn" title="Salin tautan produk">Salin Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== Data Katalog (Edit di sini) ======
+    const WHATSAPP_NUMBER = '6281234567890'; // ganti ke nomor kamu (format internasional tanpa +)
+
+    const PRODUCTS = [
+      {
+        id: 'dk-logo-pack',
+        title: 'Logo Pack – Brand Starter',
+        price: 450000,
+        desc: 'Paket logo siap pakai (AI, EPS, SVG, PNG) + panduan warna & tipografi. Cocok untuk UKM yang butuh cepat dan rapi.',
+        tags: ['Logo','Branding','Vector'],
+        images: [
+          'https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1520262494112-9fe481d36ec3?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1200&auto=format&fit=crop'
+        ]
+      },
+      {
+        id: 'dk-tee-illustration',
+        title: 'Ilustrasi Kaos – Vintage Surf',
+        price: 350000,
+        desc: 'Ilustrasi gaya retro 70-an untuk cetak kaos. File terpisah warna, siap sablon 3–4 warna.',
+        tags: ['T-Shirt','Illustration','Vintage'],
+        images: [
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1516528387618-afa90b13e000?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop'
+        ]
+      },
+      {
+        id: 'dk-social-pack',
+        title: 'Template Sosial Media – Bold Promo',
+        price: 250000,
+        desc: '10 layout Instagram & TikTok berbasis grid, mudah edit di Figma/AI. Cocok untuk promo diskon dan katalog.',
+        tags: ['Template','Social Media','Figma'],
+        images: [
+          'https://images.unsplash.com/photo-1520974735194-3ab2cd7d4d83?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1516387938699-a93567ec168e?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1200&auto=format&fit=crop'
+        ]
+      },
+      {
+        id: 'dk-bbq-poster',
+        title: 'Poster Event – Smoke & Fire',
+        price: 300000,
+        desc: 'Poster event gaya tipografi tebal + ilustrasi api, cocok untuk event kuliner & musik.',
+        tags: ['Poster','Event','Typography'],
+        images: [
+          'https://images.unsplash.com/photo-1460306855393-0410f61241c7?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1490818387583-1baba5e638af?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop'
+        ]
+      },
+      {
+        id: 'dk-brand-kit',
+        title: 'Brand Kit – Small Biz',
+        price: 850000,
+        desc: 'Paket mini identitas: logo, palet warna, font pairing, mockup kartu nama. Serah terima file lengkap.',
+        tags: ['Branding','Kit','Business'],
+        images: [
+          'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop'
+        ]
+      },
+      {
+        id: 'dk-mascot-pack',
+        title: 'Mascot Pack – Friendly Character',
+        price: 500000,
+        desc: 'Maskot karakter lucu serbaguna untuk brand & kemasan. Termasuk variasi pose dan ekspresi.',
+        tags: ['Mascot','Illustration','Packaging'],
+        images: [
+          'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1526312426976-593c1a35b1b4?q=80&w=1200&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop'
+        ]
+      }
+    ];
+
+    // ====== Util ======
+    const rupiah = (n)=> new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+    const waLink = (text)=> `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+    // ====== Render Grid ======
+    const grid = document.getElementById('grid');
+    function render(products){
+      grid.innerHTML = products.map(p=>{
+        const mini = p.images.slice(0,3).map((src,i)=>`<img src="${src}" alt="${p.title} preview ${i+1}" data-id="${p.id}" data-img="${i}"/>`).join('');
+        return `
+          <article class="card" role="listitem">
+            <div class="thumb"><img src="${p.images[0]}" alt="${p.title}" loading="lazy"/><span class="badge">${p.tags[0] || 'Desain'}</span></div>
+            <div class="card-body">
+              <div class="title">${p.title}</div>
+              <div class="desc">${p.desc}</div>
+              <div class="price">${rupiah(p.price)}</div>
+              <div class="mini">${mini}</div>
+              <div class="card-actions">
+                <button class="btn" data-open="${p.id}">Lihat Detail</button>
+                <a class="btn whatsapp" target="_blank" rel="noopener" href="${waLink(`Halo, saya tertarik dengan produk: ${p.title} (${rupiah(p.price)}). Mohon info detailnya.`)}">Beli</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    render(PRODUCTS);
+
+    // ====== Search ======
+    const search = document.getElementById('search');
+    search.addEventListener('input', ()=>{
+      const q = search.value.toLowerCase();
+      const filtered = PRODUCTS.filter(p=>
+        p.title.toLowerCase().includes(q) ||
+        p.desc.toLowerCase().includes(q) ||
+        p.tags.join(' ').toLowerCase().includes(q)
+      );
+      render(filtered);
+    });
+
+    // ====== Modal Logic ======
+    const modal = document.getElementById('modal');
+    const galleryMain = document.getElementById('galleryMain');
+    const galleryThumbs = document.getElementById('galleryThumbs');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogDesc = document.getElementById('dialogDesc');
+    const dialogPrice = document.getElementById('dialogPrice');
+    const dialogTags = document.getElementById('dialogTags');
+    const buyBtn = document.getElementById('buyBtn');
+    const copyLink = document.getElementById('copyLink');
+
+    function openModal(product, imgIndex=0){
+      dialogTitle.textContent = product.title;
+      dialogDesc.textContent = product.desc;
+      dialogPrice.textContent = rupiah(product.price);
+      dialogTags.textContent = product.tags.map(t=>`#${t}`).join(' ');
+      galleryMain.src = product.images[imgIndex] || product.images[0];
+      galleryThumbs.innerHTML = product.images.map((src,i)=>`<img src="${src}" alt="thumb ${i+1}" data-i="${i}" class="${i===imgIndex?'active':''}">`).join('');
+      buyBtn.href = waLink(`Halo, saya ingin membeli *${product.title}* (${rupiah(product.price)}).`);
+      buyBtn.setAttribute('data-id', product.id);
+      copyLink.onclick = ()=>{
+        const url = location.origin + location.pathname + `#produk/${product.id}`;
+        navigator.clipboard.writeText(url).then(()=>{
+          copyLink.textContent = 'Tersalin!';
+          setTimeout(()=> copyLink.textContent = 'Salin Link', 1200);
+        });
+      };
+      modal.classList.add('show');
+      document.body.style.overflow='hidden';
+      location.hash = `#produk/${product.id}`;
+    }
+
+    function closeModal(){
+      modal.classList.remove('show');
+      document.body.style.overflow='auto';
+      if(location.hash.startsWith('#produk/')) location.hash = '#produk';
+    }
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+    // Delegate clicks for open detail & mini thumbs
+    document.addEventListener('click', (e)=>{
+      const openBtn = e.target.closest('[data-open]');
+      if(openBtn){
+        const id = openBtn.getAttribute('data-open');
+        const product = PRODUCTS.find(p=>p.id===id);
+        if(product) openModal(product,0);
+      }
+      const mini = e.target.closest('.mini img');
+      if(mini){
+        const id = mini.getAttribute('data-id');
+        const i = +mini.getAttribute('data-img');
+        const product = PRODUCTS.find(p=>p.id===id);
+        if(product) openModal(product,i);
+      }
+      const gthumb = e.target.closest('#galleryThumbs img');
+      if(gthumb){
+        const i = +gthumb.getAttribute('data-i');
+        const id = buyBtn.getAttribute('data-id');
+        const product = PRODUCTS.find(p=>p.id===id);
+        if(product){
+          galleryMain.src = product.images[i];
+          [...galleryThumbs.children].forEach((el,idx)=> el.classList.toggle('active', idx===i));
+        }
+      }
+    });
+
+    // Deep link: #produk/{id}
+    function openFromHash(){
+      if(location.hash.startsWith('#produk/')){
+        const id = location.hash.split('/')[1];
+        const product = PRODUCTS.find(p=>p.id===id);
+        if(product) openModal(product,0);
+      }
+    }
+    window.addEventListener('hashchange', openFromHash);
+
+    // WhatsApp quick links
+    const waTop = document.getElementById('waTop');
+    const waProfile = document.getElementById('waProfile');
+    const waText = 'Halo, saya ingin konsultasi katalog desain.';
+    waTop.href = waLink(waText);
+    waProfile.href = waLink(waText);
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Open if hash preset
+    openFromHash();
+  </script>
+</body>
+</html>
